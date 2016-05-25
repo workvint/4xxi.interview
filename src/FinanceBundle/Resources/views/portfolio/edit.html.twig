@@ -1,11 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'AppBundle:home:index.html.twig' %}
 
 {% block body %}
-    <h1>Portfolio edit</h1>
+    <h1>Portfolio </h1>
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
-        {{ form_row(edit_form.items) }}
         <input type="submit" value="Edit" />
     {{ form_end(edit_form) }}
 

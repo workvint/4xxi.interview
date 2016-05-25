@@ -5,6 +5,7 @@ namespace FinanceBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
 class PortfolioItemType extends AbstractType
 {
@@ -17,6 +18,11 @@ class PortfolioItemType extends AbstractType
         $builder
             ->add('stock')
             ->add('amount')
+            ->add('remove', ButtonType::class, 
+                array(
+                    'attr' => array('class' =>'dcollection_remove_item')
+                )
+            )
         ;
     }
     

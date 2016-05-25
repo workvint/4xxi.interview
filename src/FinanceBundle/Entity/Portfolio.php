@@ -3,6 +3,7 @@
 namespace FinanceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Portfolio
@@ -23,8 +24,9 @@ class Portfolio
 
     /**
      * @var string 
-     * 
+     *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotNull
      */
     private $title;
 
@@ -34,10 +36,20 @@ class Portfolio
     private $user;
     
     /**
-     * @ORM\OneToMany(targetEntity="PortfolioItem", mappedBy="portfolio")
+     * @ORM\OneToMany(targetEntity="PortfolioItem", mappedBy="portfolio", cascade={"all"})
+     * @Assert\Count(min=1)
+     * @Assert\Valid
      */
     private $items;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -93,14 +105,7 @@ class Portfolio
     {
         return $this->user;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
+    
     /**
      * Add items
      *

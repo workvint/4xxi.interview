@@ -3,6 +3,7 @@
 namespace FinanceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Stock
@@ -25,6 +26,7 @@ class Stock
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotNull
      */
     private $title;
 
@@ -32,6 +34,7 @@ class Stock
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=255, unique=true)
+     * @Assert\NotNull
      */
     private $code;
 

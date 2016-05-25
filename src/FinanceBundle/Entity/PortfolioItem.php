@@ -3,12 +3,15 @@
 namespace FinanceBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * PortfolioItem
  *
  * @ORM\Table(name="portfolio_item")
  * @ORM\Entity(repositoryClass="FinanceBundle\Repository\PortfolioItemRepository")
+ * @UniqueEntity(fields={"portfolio", "stock"})
  */
 class PortfolioItem
 {
@@ -23,14 +26,15 @@ class PortfolioItem
 
     /**
      * @var Stock
-     *
+     * 
      * @ORM\ManyToOne(targetEntity="Stock")
+     * @Assert\NotNull
      */
     private $stock;
 
     /**
      * @var Portfolio
-     *
+     * 
      * @ORM\ManyToOne(targetEntity="Portfolio", inversedBy="items")
      */
     private $portfolio;
@@ -39,6 +43,7 @@ class PortfolioItem
      * @var int
      *
      * @ORM\Column(name="amount", type="integer")
+     * @Assert\Range(min=1, max=1000)
      */
     private $amount;
 
@@ -51,29 +56,6 @@ class PortfolioItem
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set stockId
-     *
-     * @param Stock $stockId
-     * @return PortfolioItem
-     */
-    public function setStockId($stockId)
-    {
-        $this->stockId = $stockId;
-
-        return $this;
-    }
-
-    /**
-     * Get stockId
-     *
-     * @return Stock 
-     */
-    public function getStockId()
-    {
-        return $this->stockId;
     }
 
     /**
@@ -100,35 +82,12 @@ class PortfolioItem
     }
 
     /**
-     * Set portfolioId
-     *
-     * @param \FinanceBundle\Entity\Portfolio $portfolioId
-     * @return PortfolioItem
-     */
-    public function setPortfolioId(\FinanceBundle\Entity\Portfolio $portfolioId = null)
-    {
-        $this->portfolioId = $portfolioId;
-
-        return $this;
-    }
-
-    /**
-     * Get portfolioId
-     *
-     * @return \FinanceBundle\Entity\Portfolio 
-     */
-    public function getPortfolioId()
-    {
-        return $this->portfolioId;
-    }
-
-    /**
      * Set stock
      *
      * @param \FinanceBundle\Entity\Stock $stock
      * @return PortfolioItem
      */
-    public function setStock(\FinanceBundle\Entity\Stock $stock = null)
+    public function setStock(\FinanceBundle\Entity\Stock $stock)
     {
         $this->stock = $stock;
 
@@ -151,7 +110,7 @@ class PortfolioItem
      * @param \FinanceBundle\Entity\Portfolio $portfolio
      * @return PortfolioItem
      */
-    public function setPortfolio(\FinanceBundle\Entity\Portfolio $portfolio = null)
+    public function setPortfolio(\FinanceBundle\Entity\Portfolio $portfolio)
     {
         $this->portfolio = $portfolio;
 

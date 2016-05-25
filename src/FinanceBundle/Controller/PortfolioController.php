@@ -6,13 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FinanceBundle\Entity\Portfolio;
-use FinanceBundle\Form\PortfolioType;
 
 /**
  * Portfolio controller.
  *
  * @Route("/portfolio")
+ * @Security("has_role('ROLE_USER')")
  */
 class PortfolioController extends Controller
 {
@@ -28,7 +29,7 @@ class PortfolioController extends Controller
 
         $portfolios = $em->getRepository('FinanceBundle:Portfolio')->findAll();
 
-        return $this->render('portfolio/index.html.twig', array(
+        return $this->render('FinanceBundle:portfolio:index.html.twig', array(
             'portfolios' => $portfolios,
         ));
     }
@@ -47,13 +48,20 @@ class PortfolioController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            $portfolio->setUser($this->getUser());
+            
+            foreach ($portfolio->getItems() as $portfolioItem) {
+                $portfolioItem->setPortfolio($portfolio);
+            }
+            
             $em->persist($portfolio);
             $em->flush();
 
             return $this->redirectToRoute('portfolio_show', array('id' => $portfolio->getId()));
         }
 
-        return $this->render('portfolio/new.html.twig', array(
+        return $this->render('FinanceBundle:portfolio:new.html.twig', array(
             'portfolio' => $portfolio,
             'form' => $form->createView(),
         ));
@@ -69,7 +77,7 @@ class PortfolioController extends Controller
     {
         $deleteForm = $this->createDeleteForm($portfolio);
 
-        return $this->render('portfolio/show.html.twig', array(
+        return $this->render('FinanceBundle:portfolio:show.html.twig', array(
             'portfolio' => $portfolio,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -89,13 +97,31 @@ class PortfolioController extends Controller
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            $existedItems = $em->getRepository('FinanceBundle:PortfolioItem')
+                ->findByPortfolio($portfolio);
+            $formItems = array();
+            foreach ($portfolio->getItems() as $portfolioItem) {
+                if ($portfolioItem->getId()) {
+                    $formItems[$portfolioItem->getId()] = $portfolioItem;
+                } else {
+                    $portfolioItem->setPortfolio($portfolio);
+                }
+            }
+            
+            foreach ($existedItems as $existedItem) {
+                if (!key_exists($existedItem->getId(), $formItems)) {
+                    $em->remove($existedItem);
+                }
+            }
+            
             $em->persist($portfolio);
             $em->flush();
 
             return $this->redirectToRoute('portfolio_edit', array('id' => $portfolio->getId()));
         }
 
-        return $this->render('portfolio/edit.html.twig', array(
+        return $this->render('FinanceBundle:portfolio:edit.html.twig', array(
             'portfolio' => $portfolio,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

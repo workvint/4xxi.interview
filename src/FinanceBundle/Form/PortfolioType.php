@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use FinanceBundle\Form\PortfolioItemType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
 class PortfolioType extends AbstractType
 {
@@ -18,7 +19,6 @@ class PortfolioType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('user')
             ->add('items', CollectionType::class, array(
                 'label'         => 'Акции',
                 'entry_type'    => PortfolioItemType::class,
@@ -26,6 +26,11 @@ class PortfolioType extends AbstractType
                 'allow_delete'  => true,
                 'prototype'     => true
             ))
+            ->add('add', ButtonType::class, 
+                array(
+                    'attr' => array('class' =>'dcollection_add_item')
+                )
+            )
         ;
     }
     
