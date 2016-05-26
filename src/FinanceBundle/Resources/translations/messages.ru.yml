@@ -1,0 +1,20 @@
+portfolio.form.title.label: Название
+    
+portfolio.form.items.label: Акции в портфеле
+portfolio.form.items.amount.label: Количество
+portfolio.form.items.title.label: Название 
+portfolio.form.items.button.add: Добавить акцию
+portfolio.form.items.button.remove: Удалить акцию
+
+portfolio.form.list.label: Список портфелей
+
+portfolio.form.button.new: Создать портфель
+portfolio.form.button.edit: Сохранить портфель
+portfolio.form.button.delete: Удалить портфель
+
+portfolio.list.new.label: Создать портфель
+portfolio.list.show.label: Подробнее
+portfolio.list.edit.label: Редактировать
+
+    
+

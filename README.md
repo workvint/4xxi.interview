@@ -32,6 +32,13 @@ $ app/console do:sc:up --force
 $ app/console do:fi:lo -n
 ```
 
+js/css:
+```
+$ app/console as:in --relative --symlink
+
+$ app/console as:du
+```
+
 
 # Структура проекта
 
@@ -40,8 +47,6 @@ $ app/console do:fi:lo -n
 
 # TODO
 
-1. Права при crud
-2. Проверка на уникальность при добавлении акции в портфель
 3. График
 4. Фикстуры (акции)
 5. Верстка

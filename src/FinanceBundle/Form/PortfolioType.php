@@ -18,19 +18,18 @@ class PortfolioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
+            ->add('title', null, array('label' => 'portfolio.form.title.label'))
             ->add('items', CollectionType::class, array(
-                'label'         => 'Акции',
+                'label'         => 'portfolio.form.items.label',
                 'entry_type'    => PortfolioItemType::class,
                 'allow_add'     => true,
                 'allow_delete'  => true,
-                'prototype'     => true
+                'prototype'     => true,
             ))
-            ->add('add', ButtonType::class, 
-                array(
-                    'attr' => array('class' =>'dcollection_add_item')
-                )
-            )
+            ->add('add', ButtonType::class, array(
+                'label' => 'portfolio.form.items.button.add',    
+                'attr'  => array('class' =>'dcollection_add_item'),
+            ))
         ;
     }
     

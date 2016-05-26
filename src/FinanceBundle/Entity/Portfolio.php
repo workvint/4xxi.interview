@@ -37,7 +37,7 @@ class Portfolio
     
     /**
      * @ORM\OneToMany(targetEntity="PortfolioItem", mappedBy="portfolio", cascade={"all"})
-     * @Assert\Count(min=1)
+     * @Assert\Count(min=1, max=6, minMessage="portfolio.items.min", maxMessage="portfolio.items.max")
      * @Assert\Valid
      */
     private $items;
@@ -104,6 +104,26 @@ class Portfolio
     public function getUser()
     {
         return $this->user;
+    }
+    
+    /**
+     * @Assert\IsTrue(message="portfolio.items.not_uniquie")
+     */
+    public function isItemsUnique() 
+    {
+        $formItems = array();
+        
+        foreach ($this->getItems() as $portfolioItem) 
+        {
+            $stockId = $portfolioItem->getStock()->getId();
+            if (key_exists($stockId, $formItems)) {
+                return false;
+            }
+            
+            $formItems[$stockId] = $stockId;
+        }
+        
+        return true;
     }
     
     /**

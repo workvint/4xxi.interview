@@ -27,7 +27,8 @@ class PortfolioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $portfolios = $em->getRepository('FinanceBundle:Portfolio')->findAll();
+        $portfolios = $em->getRepository('FinanceBundle:Portfolio')
+            ->findByUser($this->getUser());
 
         return $this->render('FinanceBundle:portfolio:index.html.twig', array(
             'portfolios' => $portfolios,
@@ -58,12 +59,14 @@ class PortfolioController extends Controller
             $em->persist($portfolio);
             $em->flush();
 
-            return $this->redirectToRoute('portfolio_show', array('id' => $portfolio->getId()));
+            return $this->redirectToRoute('portfolio_show', array(
+                'id' => $portfolio->getId()
+            ));
         }
 
         return $this->render('FinanceBundle:portfolio:new.html.twig', array(
             'portfolio' => $portfolio,
-            'form' => $form->createView(),
+            'form'      => $form->createView(),
         ));
     }
 
@@ -72,14 +75,15 @@ class PortfolioController extends Controller
      *
      * @Route("/{id}", name="portfolio_show")
      * @Method("GET")
+     * @Security("is_granted('show', portfolio)")
      */
     public function showAction(Portfolio $portfolio)
     {
         $deleteForm = $this->createDeleteForm($portfolio);
 
         return $this->render('FinanceBundle:portfolio:show.html.twig', array(
-            'portfolio' => $portfolio,
-            'delete_form' => $deleteForm->createView(),
+            'portfolio'     => $portfolio,
+            'delete_form'   => $deleteForm->createView(),
         ));
     }
 
@@ -88,6 +92,7 @@ class PortfolioController extends Controller
      *
      * @Route("/{id}/edit", name="portfolio_edit")
      * @Method({"GET", "POST"})
+     * @Security("is_granted('edit', portfolio)")
      */
     public function editAction(Request $request, Portfolio $portfolio)
     {
@@ -118,13 +123,15 @@ class PortfolioController extends Controller
             $em->persist($portfolio);
             $em->flush();
 
-            return $this->redirectToRoute('portfolio_edit', array('id' => $portfolio->getId()));
+            return $this->redirectToRoute('portfolio_edit', array(
+                'id' => $portfolio->getId()
+            ));
         }
 
         return $this->render('FinanceBundle:portfolio:edit.html.twig', array(
-            'portfolio' => $portfolio,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'portfolio'     => $portfolio,
+            'edit_form'     => $editForm->createView(),
+            'delete_form'   => $deleteForm->createView(),
         ));
     }
 
@@ -133,6 +140,7 @@ class PortfolioController extends Controller
      *
      * @Route("/{id}", name="portfolio_delete")
      * @Method("DELETE")
+     * @Security("is_granted('delete', portfolio)")
      */
     public function deleteAction(Request $request, Portfolio $portfolio)
     {
@@ -158,7 +166,9 @@ class PortfolioController extends Controller
     private function createDeleteForm(Portfolio $portfolio)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('portfolio_delete', array('id' => $portfolio->getId())))
+            ->setAction($this->generateUrl('portfolio_delete', array(
+                'id' => $portfolio->getId()
+            )))
             ->setMethod('DELETE')
             ->getForm()
         ;

@@ -1,4 +1,7 @@
 services:
-#    finance.example:
-#        class: FinanceBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+    finance.pportfolio_voter:
+        class: FinanceBundle\Security\PortfolioVoter
+        tags:
+            - { name: security.voter }
+        # small performance boost
+        public: false
