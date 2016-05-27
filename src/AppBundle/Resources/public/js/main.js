@@ -3,7 +3,7 @@ $(document).ready(function() {
         initialize: function() {
             this.$div = this.$el.find('div[data-prototype]');
             this.widget = this.$div.attr('data-prototype');
-            this.widgetCount = this.$div.children().length; 
+            this.widgetId = this.$div.children().length; 
         },
         
         events: {
@@ -16,13 +16,11 @@ $(document).ready(function() {
         },
        
         remove_item: function(event) {
-           $(event.currentTarget).parent().parent().parent().remove();
+           $(event.currentTarget).parents().get(2).remove();
         },
         
         render: function() {
-            this.$div.append(
-                this.widget.replace(/__name__/g, this.widgetCount++)
-            );
+            this.$div.append(this.widget.replace(/__name__/g, this.widgetId++));
         }
     });
     

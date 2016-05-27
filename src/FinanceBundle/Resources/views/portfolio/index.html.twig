@@ -1,21 +1,27 @@
 {% extends 'AppBundle:home:index.html.twig' %}
 
 {% block body %}
-    <h1>Portfolio list</h1>
+    <h1>{{ 'portfolio.list.h1'|trans }}</h1>
 
-    <table>
+    <div class="panel panel-default">
+        <div class="panel-body">    
+            <a href="{{ path('portfolio_new') }}" class="btn btn-success" role="button">{{ 'portfolio.list.new.label'|trans }}</a>
+        </div>
+    </div>
+        
+    <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Actions</th>
+                <th>#</th>
+                <th>{{ 'portfolio.list.title.label'|trans }}</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for portfolio in portfolios %}
             <tr>
-                <td><a href="{{ path('portfolio_show', { 'id': portfolio.id }) }}">{{ portfolio.id }}</a></td>
-                <td>{{ portfolio.title }}</td>
+                <td>{{ loop.index }}</td>
+                <td><a href="{{ path('portfolio_show', { 'id': portfolio.id }) }}">{{ portfolio.title }}</a></td>
                 <td>
                     <ul>
                         <li>
@@ -30,10 +36,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('portfolio_new') }}">{{ 'portfolio.list.new.label'|trans }}</a>
-        </li>
-    </ul>
 {% endblock %}

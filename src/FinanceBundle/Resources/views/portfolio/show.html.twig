@@ -1,24 +1,74 @@
 {% extends 'AppBundle:home:index.html.twig' %}
 
-{% block body %}
-    <h1>Portfolio</h1>
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+{% endblock %}
 
-    <table>
+{% block body %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{{ path('portfolio_index') }}">&larr;{{ 'portfolio.new.list.label'|trans }}</a>
+        </li>
+    </ul>
+    
+    <h1>{{ 'portfolio.edit.h1'|trans }}</h1>
+
+    <table class="table table-bordered">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ portfolio.id }}</td>
+                <th class="active">{{ 'portfolio.show.title.label'|trans }}</th>
+                <td>{{ portfolio.title }}</td>
             </tr>
             <tr>
-                <th>Title</th>
-                <td>{{ portfolio.title }}</td>
+                <th class="active">{{ 'portfolio.show.items.label'|trans }}</th>
+                <td>
+                    <table class="table">
+                        <tr class="active">
+                            <th>#</th>
+                            <th>{{ 'portfolio.show.items.title.label'|trans }}</th>
+                            <th>{{ 'portfolio.show.items.amount.label'|trans }}</th>
+                        </tr>
+                        {% for item in portfolio.items %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ item.stock }}</td>
+                            <td>{{ item.amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </td>
             </tr>
         </tbody>
     </table>
+    
+    <h2>{{ 'portfolio.show.chart.h2'|trans }}</h2>
+    <div id="portfolio_chart"></div>    
+                    
+    <script type="text/javascript">
+    $(document).ready(function() {
+        google.charts.load('current', {packages: ['corechart', 'line']});
+        google.charts.setOnLoadCallback(drawBasic);
 
-    <ul>
-        <li>
-            <a href="{{ path('portfolio_index') }}">{{ 'portfolio.form.list.label'|trans }}</a>
-        </li>
-    </ul>
+        function drawBasic() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'date');
+            data.addColumn('number', '{{ portfolio.title }}');
+
+            data.addRows({{ profit_graph|json_encode()|raw }});
+            
+            var options = {
+                vAxis: {
+                    title: '{{ 'portfolio.show.chart.vaxis'|trans }}, $'
+                },
+                hAxis: {
+                    title: '{{ 'portfolio.show.chart.haxis'|trans }}'
+                }
+            };
+
+            var chart = new google.visualization.LineChart($('#portfolio_chart')[0]);
+            chart.draw(data, options);
+        }
+    });
+    </script>
 {% endblock %}

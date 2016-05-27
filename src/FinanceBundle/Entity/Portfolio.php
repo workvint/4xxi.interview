@@ -31,7 +31,7 @@ class Portfolio
     private $title;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
      */
     private $user;
     

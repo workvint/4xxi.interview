@@ -20,6 +20,10 @@
         {% endblock %}
     </head>
     <body>
+        <div class="container">
+        {% block toolbar %}{% endblock %}    
+            
         {% block body %}{% endblock %}
+        </div>
     </body>
 </html>

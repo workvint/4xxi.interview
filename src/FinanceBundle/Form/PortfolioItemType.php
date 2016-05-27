@@ -16,11 +16,11 @@ class PortfolioItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('stock', null, array('label' => 'portfolio.form.items.title.label'))
-            ->add('amount', null, array('label' => 'portfolio.form.items.amount.label'))
+            ->add('stock', null, array('label' => 'portfolio.new.form.items.title.label'))
+            ->add('amount', null, array('label' => 'portfolio.new.form.items.amount.label'))
             ->add('remove', ButtonType::class, array(
-                'label' => 'portfolio.form.items.button.remove',
-                'attr'  => array('class' =>'dcollection_remove_item'),
+                'label' => 'portfolio.new.form.items.button.remove',
+                'attr'  => array('class' => 'dcollection_remove_item'),
             ))
         ;
     }

@@ -1,21 +1,26 @@
 {% extends 'AppBundle:home:index.html.twig' %}
 
 {% block body %}
-    <h1>Portfolio </h1>
-
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="{{ 'portfolio.form.button.edit'|trans }}" />
-    {{ form_end(edit_form) }}
-
-    <ul>
+    <ul class="breadcrumb">
         <li>
-            <a href="{{ path('portfolio_index') }}">{{ 'portfolio.form.list.label'|trans }}</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="{{ 'portfolio.form.button.delete'|trans }}">
-            {{ form_end(delete_form) }}
+            <a href="{{ path('portfolio_index') }}">&larr;{{ 'portfolio.new.list.label'|trans }}</a>
         </li>
     </ul>
+    
+    <h1>{{ 'portfolio.edit.h1'|trans }}</h1>
+    
+    <div class="panel panel-default">
+        <div class="panel-body">    
+            
+        {{ form_start(edit_form) }}
+            {{ form_widget(edit_form) }}
+            <input type="submit" value="{{ 'portfolio.edit.form.submit'|trans }}" class="btn btn-success" />
+        {{ form_end(edit_form) }}
+
+        </div>
+    </div>
+    
+    {{ form_start(delete_form) }}
+        <input type="submit" value="{{ 'portfolio.delete.form.submit'|trans }}" class="btn btn-danger" />
+    {{ form_end(delete_form) }}
 {% endblock %}

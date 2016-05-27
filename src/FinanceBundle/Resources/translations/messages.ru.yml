@@ -1,20 +1,31 @@
-portfolio.form.title.label: Название
-    
-portfolio.form.items.label: Акции в портфеле
-portfolio.form.items.amount.label: Количество
-portfolio.form.items.title.label: Название 
-portfolio.form.items.button.add: Добавить акцию
-portfolio.form.items.button.remove: Удалить акцию
-
-portfolio.form.list.label: Список портфелей
-
-portfolio.form.button.new: Создать портфель
-portfolio.form.button.edit: Сохранить портфель
-portfolio.form.button.delete: Удалить портфель
-
+portfolio.list.h1: Список инвестиционных портфелей
+portfolio.list.title.label: Название
 portfolio.list.new.label: Создать портфель
 portfolio.list.show.label: Подробнее
 portfolio.list.edit.label: Редактировать
 
-    
+portfolio.new.h1: Новый инвестиционный портфель
+portfolio.new.form.title.label: Название
+portfolio.new.form.items.label: Акции в портфеле
+portfolio.new.form.items.amount.label: Количество
+portfolio.new.form.items.title.label: Название 
+portfolio.new.form.items.button.add: Добавить акцию
+portfolio.new.form.items.button.remove: Удалить акцию
+portfolio.new.form.submit: Создать портфель
+portfolio.new.list.label: Список портфелей
+portfolio.new.message.success: Портфель создан
 
+portfolio.edit.h1: Инвестиционный портфель 
+portfolio.edit.form.submit: Сохранить портфель
+portfolio.edit.message.success: Изменения сохранены
+
+portfolio.delete.form.submit: Удалить портфель
+portfolio.delete.message.success: Портфель удален
+
+portfolio.show.title.label: Название
+portfolio.show.items.label: Акции
+portfolio.show.items.title.label: Название
+portfolio.show.items.amount.label: Количество
+portfolio.show.chart.h2: Cтоимость портфеля
+portfolio.show.chart.vaxis: Стоимость
+portfolio.show.chart.haxis: Дата

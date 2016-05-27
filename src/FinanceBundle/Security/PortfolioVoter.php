@@ -4,7 +4,7 @@ namespace FinanceBundle\Security;
 
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use AppBundle\Entity\User;
+use UserBundle\Entity\User;
 use FinanceBundle\Entity\Portfolio;
 
 /**

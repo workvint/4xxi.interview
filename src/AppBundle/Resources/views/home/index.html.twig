@@ -1,4 +1,12 @@
-{% extends 'base.html.twig' %}
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    
+    {% stylesheets '@AppBundle/Resources/public/css/*' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+{% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
@@ -8,3 +16,26 @@
     {% endjavascripts %}
 {% endblock %}
 
+{% block toolbar %}
+    {% if is_granted('ROLE_USER') %}
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p class="navbar-text"><em>{{ 'home.greeting.label'|trans }} </em>{{ app.user.username }}</p>
+                </li>
+                <li>
+                    <a href="{{ path('fos_user_security_logout') }}" class="btn btn-default" role="button">{{ 'home.logout.label'|trans }}</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    {% endif %}
+    
+    {% for flash_message in app.session.flashBag.get('success') %}
+    <div class="alert alert-success">
+        {{ flash_message|trans }}
+    </div>
+    {% endfor %}
+
+{% endblock %}

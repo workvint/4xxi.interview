@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use FinanceBundle\Entity\Portfolio;
+use DirkOlbrich\YahooFinanceQuery\YahooFinanceQuery;
 
 /**
  * Portfolio controller.
@@ -59,6 +60,8 @@ class PortfolioController extends Controller
             $em->persist($portfolio);
             $em->flush();
 
+            $this->addFlash('success', 'portfolio.new.message.success');
+            
             return $this->redirectToRoute('portfolio_show', array(
                 'id' => $portfolio->getId()
             ));
@@ -83,7 +86,7 @@ class PortfolioController extends Controller
 
         return $this->render('FinanceBundle:portfolio:show.html.twig', array(
             'portfolio'     => $portfolio,
-            'delete_form'   => $deleteForm->createView(),
+            'profit_graph'  => array_values($this->profitGraph($portfolio)),
         ));
     }
 
@@ -123,6 +126,8 @@ class PortfolioController extends Controller
             $em->persist($portfolio);
             $em->flush();
 
+            $this->addFlash('success', 'portfolio.edit.message.success');
+                
             return $this->redirectToRoute('portfolio_edit', array(
                 'id' => $portfolio->getId()
             ));
@@ -151,6 +156,8 @@ class PortfolioController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->remove($portfolio);
             $em->flush();
+            
+            $this->addFlash('success', 'portfolio.delete.message.success');
         }
 
         return $this->redirectToRoute('portfolio_index');
@@ -160,7 +167,6 @@ class PortfolioController extends Controller
      * Creates a form to delete a Portfolio entity.
      *
      * @param Portfolio $portfolio The Portfolio entity
-     *
      * @return \Symfony\Component\Form\Form The form
      */
     private function createDeleteForm(Portfolio $portfolio)
@@ -172,5 +178,56 @@ class PortfolioController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    
+    /**
+     * Portfolio profit graph
+     * 
+     * @todo cache it, if portfolio didn't edited 
+     * 
+     * @param Portfolio $portfolio The Portfolio entity
+     * @return array
+     */
+    private function profitGraph(Portfolio $portfolio, $date='2 year')
+    {
+        $graph = array();
+        
+        $startDate  = date('Y-m-d', strtotime('-' . $date));
+        if (false === $startDate) {
+            return $graph;
+        }
+        
+        $query = new YahooFinanceQuery();
+        // weekly 
+        $param      = 'w';
+        $fieldPrice = 'AdjClose';
+        $fieldDate  = 'Date';
+        
+        foreach ($portfolio->getItems() as $portfolioItem) {
+            
+            $queryResult = $query->historicalQuote($portfolioItem->getStock()->getCode(),
+                $startDate, '', $param
+            )->get();
+            
+            $count = count($queryResult);
+            if ($count) {
+                for ($i = $count - 1; $i--; $i >= 0) {
+                    $item = $queryResult[$i];
+                
+                    $point = array(
+                        $item[$fieldDate],
+                        $item[$fieldPrice] * $portfolioItem->getAmount(),
+                    );
+
+                    if (key_exists($item[$fieldDate], $graph)) {
+                        $point[1] += $graph[$item[$fieldDate]][1];
+                    }
+
+                    $graph[$item[$fieldDate]] = $point;
+                }
+            }
+        }
+        
+        return $graph;
     }
 }
